@@ -69,15 +69,15 @@ app.get('/api/auth/check', adminAuth, (_req: Request, res: Response) => {
 app.use('/api/products', adminAuth, productRoutes);
 app.use('/api/categories', adminAuth, categoryRoutes);
 
-/* ===================== FRONTEND SERVING ===================== */
 if (process.env.NODE_ENV === 'production') {
   const rootDir = path.resolve(__dirname, '../../');
   const adminBuildPath = path.join(rootDir, 'client/admin/build/client');
 
+  // Serve static files (JS/CSS/assets)
   app.use('/admin', express.static(adminBuildPath));
 
-  // ✅ Use a regex or simpler wildcard pattern
-  app.get(/^\/admin\/.*/, (req: Request, res: Response) => {
+  // Catch-all for SPA — matches /admin, /admin/, and all subpaths
+  app.get(/^\/admin(\/.*)?$/, (req: Request, res: Response) => {
     res.sendFile(path.join(adminBuildPath, 'index.html'));
   });
 }
