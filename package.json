@@ -7,10 +7,9 @@
     "server": "cd server && npm run dev",
     "install-server": "cd server && npm install",
     "install-admin": "cd client/admin && npm install",
-    "install-all": "npm run install-server && npm run install-admin",
-    "build-admin": "cd client/admin && npm run build",
-    "build-server": "cd server && npm run build",
-    "build": "npm run install-all && npm run build-admin && npm run build-server"
+    "build-admin": "cd client/admin && npm install && npm run build",
+    "build-server": "cd server && npm install && npm run build",
+    "build": "npm run build-admin && npm run build-server"
   },
   "keywords": [],
   "author": "",
