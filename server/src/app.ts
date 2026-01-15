@@ -66,8 +66,8 @@ app.get('/api/auth/check', adminAuth, (_req: Request, res: Response) => {
   res.json({ success: true });
 });
 
-app.use('/api/products', adminAuth, productRoutes);
-app.use('/api/categories', adminAuth, categoryRoutes);
+app.use('/api/products', productRoutes);
+app.use('/api/categories', categoryRoutes);
 
 if (process.env.NODE_ENV === 'production') {
   const rootDir = path.resolve(__dirname, '../../');
