@@ -6,8 +6,8 @@
     "start": "cd server && npm start",
     "server": "cd server && npm run dev",
     "install-server": "cd server && npm install",
-    "install-admin": "cd client/admin && npm install",
-    "build-admin": "cd client/admin && npm install && npm run build",
+    "install-admin": "cd client/admin && npm install --include=dev",
+    "build-admin": "cd client/admin && npm install --include=dev && npm run build",
     "build-server": "cd server && npm install && npm run build",
     "build": "npm run build-admin && npm run build-server"
   },
