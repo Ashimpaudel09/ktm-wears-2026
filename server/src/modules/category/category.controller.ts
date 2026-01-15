@@ -43,7 +43,7 @@ export class CategoryController {
 
   async getCategoryById(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const category = await categoryService.getCategoryById(req.params.id);
+      const category = await categoryService.getCategoryById(req.params.id as string);
 
       res.status(200).json({
         success: true,
@@ -57,7 +57,7 @@ export class CategoryController {
 
   async getCategoryBySlug(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const category = await categoryService.getCategoryBySlug(req.params.slug);
+      const category = await categoryService.getCategoryBySlug(req.params.slug as string);
 
       res.status(200).json({
         success: true,
@@ -80,7 +80,7 @@ export class CategoryController {
         return;
       }
 
-      const category = await categoryService.updateCategory(req.params.id, value);
+      const category = await categoryService.updateCategory(req.params.id as string, value);
 
       res.status(200).json({
         success: true,
@@ -94,7 +94,7 @@ export class CategoryController {
 
   async deleteCategory(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      await categoryService.deleteCategory(req.params.id);
+      await categoryService.deleteCategory(req.params.id as string);
 
       res.status(200).json({
         success: true,

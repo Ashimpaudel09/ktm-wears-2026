@@ -62,7 +62,7 @@ export class ProductController {
 
   async getProductById(req: MulterRequest, res: Response, next: NextFunction): Promise<void> {
     try {
-      const product = await productService.getProductById(req.params.id);
+      const product = await productService.getProductById(req.params.id as string);
 
       res.status(200).json({
         success: true,
@@ -76,7 +76,7 @@ export class ProductController {
 
   async getProductBySlug(req: MulterRequest, res: Response, next: NextFunction): Promise<void> {
     try {
-      const product = await productService.getProductBySlug(req.params.slug);
+      const product = await productService.getProductBySlug(req.params.slug as string);
 
       res.status(200).json({
         success: true,
@@ -104,7 +104,7 @@ export class ProductController {
         newImages = await uploadMultipleToCloudinary(req.files);
       }
 
-      const product = await productService.updateProduct(req.params.id, value, newImages);
+      const product = await productService.updateProduct(req.params.id as string, value, newImages);
 
       res.status(200).json({
         success: true,
@@ -118,7 +118,7 @@ export class ProductController {
 
   async deleteProduct(req: MulterRequest, res: Response, next: NextFunction): Promise<void> {
     try {
-      await productService.deleteProduct(req.params.id);
+      await productService.deleteProduct(req.params.id as string);
 
       res.status(200).json({
         success: true,
