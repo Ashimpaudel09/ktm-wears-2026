@@ -1,12 +1,11 @@
 {
-  "name": "ktmwears-root",
-  "private": true,
-  "scripts": {
-    "install-all": "npm install --prefix client && npm install --prefix server",
-    "build-client": "npm run build --prefix client",
-    "build-server": "echo 'Server does not need a build' || true",
-    "build": "npm run build-client && npm run build-server",
-    "start-server": "npm start --prefix server",
-    "start": "npm run build && npm run start-server"
-  }
+    "name": "ktmwears-root",
+    "private": true,
+    "scripts": {
+        "install-all": "npm install --prefix ./client/admin && npm install --prefix ./server",
+        "build-client": "npm run build --prefix ./client/admin",
+        "build": "npm run install-all && npm run build-client",
+        "start-server": "npm start --prefix ./server",
+        "start": "npm run build && npm run start-server"
+    }
 }
