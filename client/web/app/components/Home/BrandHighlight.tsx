@@ -12,15 +12,13 @@ const features = [
   {
     icon: Feather,
     title: "Comfort First",
-    description:
-      "Designed for all-day wear without sacrificing style.",
+    description: "Designed for all-day wear without sacrificing style.",
     color: "bg-purple-100 text-purple-600",
   },
   {
     icon: Leaf,
     title: "Sustainable",
-    description:
-      "Eco-conscious materials and responsible production.",
+    description: "Eco-conscious materials and responsible production.",
     color: "bg-green-100 text-green-600",
   },
 ];
@@ -30,7 +28,6 @@ export function BrandHighlight() {
     <section className="bg-white py-0 sm:py-0 lg:py-0">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col lg:flex-row gap-12 lg:gap-16">
-
           {/* Left Content */}
           <div className="w-full lg:w-1/3 lg:sticky lg:top-24">
             <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-5">
@@ -39,8 +36,8 @@ export function BrandHighlight() {
             </h2>
 
             <p className="text-gray-600 text-base leading-relaxed mb-6">
-              Thoughtfully designed apparel that balances comfort,
-              durability, and modern style.
+              Thoughtfully designed apparel that balances comfort, durability,
+              and modern style.
             </p>
 
             <button className="text-[#0f00ff] font-semibold inline-flex items-center gap-2 hover:gap-3 transition-all">
@@ -104,7 +101,6 @@ export function BrandHighlight() {
               </motion.div>
             ))}
           </div>
-
         </div>
       </div>
     </section>

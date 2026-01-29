@@ -25,7 +25,6 @@ export function Benefits() {
   return (
     <section className="bg-white border-t border-gray-100 pb-4">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-
         {/* MOBILE: Landscape rows */}
         <div className="flex flex-col gap-4 md:hidden">
           {benefits.map((benefit, index) => (
@@ -57,10 +56,7 @@ export function Benefits() {
               className="flex flex-col items-center text-center px-8 py-0"
             >
               <div className="mb-4 text-gray-900">
-                <benefit.icon
-                  className="w-8 h-8"
-                  strokeWidth={1.5}
-                />
+                <benefit.icon className="w-8 h-8" strokeWidth={1.5} />
               </div>
 
               <h3 className="text-lg font-semibold text-gray-900 mb-2">
@@ -73,7 +69,6 @@ export function Benefits() {
             </div>
           ))}
         </div>
-
       </div>
     </section>
   );

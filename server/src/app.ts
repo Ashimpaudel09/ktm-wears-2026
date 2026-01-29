@@ -80,6 +80,17 @@ if (process.env.NODE_ENV === 'production') {
   app.get(/^\/admin(\/.*)?$/, (req: Request, res: Response) => {
     res.sendFile(path.join(adminBuildPath, 'index.html'));
   });
+
+
+  const clientBuildPath = path.join(rootDir, 'client/admin/build/client');
+
+  // Serve static files (JS/CSS/assets)
+  app.use('/client', express.static(adminBuildPath));
+
+  // Catch-all for SPA — matches /admin, /admin/, and all subpaths
+  app.get(/^\/client(\/.*)?$/, (req: Request, res: Response) => {
+    res.sendFile(path.join(clientBuildPath, 'index.html'));
+  });
 }
 
 /* ===================== ERROR HANDLING ===================== */

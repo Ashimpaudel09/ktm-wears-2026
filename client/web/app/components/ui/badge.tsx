@@ -5,13 +5,7 @@ import clsx from "clsx";
 /*                                    TYPES                                   */
 /* -------------------------------------------------------------------------- */
 
-type BadgeVariant =
-  | "blue"
-  | "red"
-  | "green"
-  | "yellow"
-  | "gray"
-  | "black";
+type BadgeVariant = "blue" | "red" | "green" | "yellow" | "gray" | "black";
 
 type BadgeProps = {
   children: React.ReactNode;
@@ -36,17 +30,13 @@ const colorStyles: Record<BadgeVariant, string> = {
 /*                                 COMPONENT                                  */
 /* -------------------------------------------------------------------------- */
 
-export function Badge({
-  children,
-  color = "gray",
-  className,
-}: BadgeProps) {
+export function Badge({ children, color = "gray", className }: BadgeProps) {
   return (
     <span
       className={clsx(
         "inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-wide",
         colorStyles[color],
-        className
+        className,
       )}
     >
       {children}

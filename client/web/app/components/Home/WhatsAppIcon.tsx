@@ -1,10 +1,6 @@
 import React from "react";
 
-const WhatsAppIcon = ({
-  size = 24,
-  color = "currentColor",
-  ...props
-}) => (
+const WhatsAppIcon = ({ size = 24, color = "currentColor", ...props }) => (
   <svg
     width={size}
     height={size}

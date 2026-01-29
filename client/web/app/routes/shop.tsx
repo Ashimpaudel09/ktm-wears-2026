@@ -5,29 +5,13 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { useNavigate, useSearchParams } from "react-router";
+import { useSearchParams } from "react-router";
 import { motion } from "motion/react";
 import { Badge } from "@/components/ui/badge";
 import { ProductCard } from "@/components/Product/Product";
 import { useProductStore } from "@/lib/store/productStore";
 import { useCategoryStore } from "@/lib/store/categoryStore";
-
-/* -------------------------------------------------------------------------- */
-/*                                   TYPES                                    */
-/* -------------------------------------------------------------------------- */
-
-type Category = { _id: string; name: string };
-
-type Product = {
-  _id: string;
-  name: string;
-  description?: string;
-  images?: Array<{ url?: string } | string>;
-  category?: string | { name: string } | Category;
-  price?: number;
-  isFeatured?: boolean;
-  createdAt?: string;
-};
+import type { ProductImage } from "@/types";
 
 /* -------------------------------------------------------------------------- */
 /*                              DEBOUNCE HOOK                                  */
@@ -49,7 +33,6 @@ function useDebounce<T>(value: T, delay = 400) {
 /* -------------------------------------------------------------------------- */
 
 export default function ShopPage() {
-  const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
 
   /* ------------------------------ UI STATE ------------------------------- */
@@ -234,24 +217,34 @@ export default function ShopPage() {
         {/* PRODUCT GRID */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
           {displayedProducts.map((product) => {
-            const images = (product.images || []).map((img) =>
-              typeof img === "string" ? img : img?.url || "",
-            );
+            // Normalize images to ProductImage[]
+            const images: ProductImage[] =
+              product.images && product.images.length > 0
+                ? product.images.map((img) => ({
+                    url: img.url || "/placeholder.jpg",
+                    publicId: img.publicId || img.url || "placeholder",
+                    alt: img.alt || product.name,
+                    id: img.id,
+                  }))
+                : [
+                    {
+                      url: "/placeholder.jpg",
+                      publicId: "placeholder",
+                      alt: product.name,
+                    },
+                  ];
 
             return (
-              <motion.div>
+              <motion.div key={product._id}>
                 <ProductCard
-                  key={product._id}
                   product={{
                     ...product,
-                    images: images.length ? images : ["/placeholder.jpg"],
+                    images, // now type-safe
                   }}
                   onWhatsapp={(id) =>
                     window.open(
                       `https://wa.me/9779863796211?text=${encodeURIComponent(
-                        "Hello! I am interested in this product: https://" +
-                          window.location.host +
-                          `/product/${id}`,
+                        `Hello! I am interested in this product: https://${window.location.host}/product/${id}`,
                       )}`,
                     )
                   }

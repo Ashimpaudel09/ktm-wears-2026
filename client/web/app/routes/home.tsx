@@ -1,4 +1,3 @@
-import { Navbar } from "@/components/Home/Navbar";
 import type { Route } from "./+types/home";
 import { Categories } from "@/components/Home/Categories";
 import { Hero } from "@/components/Home/Hero";
@@ -7,7 +6,6 @@ import { FeaturedCollection } from "@/components/Home/FeaturedCollection";
 import { SocialMedia } from "@/components/Home/SocialMedia";
 import { Benefits } from "@/components/Home/Benefits";
 import { BrandHighlight } from "@/components/Home/BrandHighlight";
-import { Footer } from "@/components/Home/Footer";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -17,7 +15,7 @@ export function meta({}: Route.MetaArgs) {
 }
 
 export default function Home() {
-  return(
+  return (
     <div>
       <main className="space-y-19">
         <Hero />

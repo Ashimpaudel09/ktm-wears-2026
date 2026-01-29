@@ -58,7 +58,7 @@ const CategoryCard = memo(
         <span className="font-medium text-lg text-gray-900">{title}</span>
       </div>
     </motion.div>
-  )
+  ),
 );
 
 CategoryCard.displayName = "CategoryCard";
@@ -75,14 +75,14 @@ export function Categories() {
   }, [fetchCategories]);
 
   const activeCategories = categories.filter(
-    (cat: CategoryFormData) => cat.isActive
+    (cat: CategoryFormData) => cat.isActive,
   );
 
   const handleNavigate = useCallback(
     (slug: string) => {
       navigate(`/shop?cat=${slug}`);
     },
-    [navigate]
+    [navigate],
   );
 
   return (

@@ -23,7 +23,11 @@ interface ProductState {
   createProduct: (formData: FormData) => Promise<void>;
   updateProduct: (id: string, formData: FormData) => Promise<void>;
   deleteProduct: (id: string) => Promise<void>;
-  whatsappContact: (phoneNumber: string, message: string, productId: string) => void;
+  whatsappContact: (
+    phoneNumber: string,
+    message: string,
+    productId: string,
+  ) => void;
   resetProducts: () => void;
 }
 
@@ -36,7 +40,6 @@ export const useProductStore = create<ProductState>((set, get) => ({
     limit: 12,
     totalPages: 0,
   },
-  
 
   fetchProducts: async (filters: Record<string, unknown> = {}) => {
     set({ loading: true });
@@ -101,24 +104,22 @@ export const useProductStore = create<ProductState>((set, get) => ({
       throw error;
     }
   },
- whatsappContact: (
-  phoneNumber: string,
-  message: string,
-  productId: string
-) => {
-  const productUrl = `${window.location.origin}/product?id=${productId}`;
+  whatsappContact: (
+    phoneNumber: string,
+    message: string,
+    productId: string,
+  ) => {
+    const productUrl = `${window.location.origin}/product?id=${productId}`;
 
-  const fullMessage = `${message}\n\nProduct link:\n${productUrl}`;
+    const fullMessage = `${message}\n\nProduct link:\n${productUrl}`;
 
-  const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(
-    fullMessage
-  )}`;
+    const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(
+      fullMessage,
+    )}`;
 
-  window.open(url, "_blank");
-},
-resetProducts: () => {
+    window.open(url, "_blank");
+  },
+  resetProducts: () => {
     set({ products: [] });
   },
-
 }));
-

@@ -6,7 +6,11 @@
     "build": "react-router build",
     "dev": "react-router dev",
     "start": "react-router-serve ./build/server/index.js",
-    "typecheck": "react-router typegen && tsc"
+    "typecheck": "react-router typegen && tsc",
+    "format:check": "npx prettier . --check",
+    "format:fix": "npx prettier . --write",
+    "lint": "npx eslint ./",
+    "bp": " npm run format:fix  && npm run typecheck && npm run lint"
   },
   "dependencies": {
     "@radix-ui/react-accordion": "^1.2.3",
@@ -43,6 +47,7 @@
     "cmdk": "^1.1.1",
     "date-fns": "^3.6.0",
     "embla-carousel-react": "^8.6.0",
+    "typescript-eslint": "^8.53.0",
     "input-otp": "^1.4.2",
     "isbot": "^5.1.31",
     "lucide-react": "^0.487.0",
@@ -75,6 +80,12 @@
     "tailwindcss": "^4.1.13",
     "typescript": "^5.9.2",
     "vite": "^7.1.7",
-    "vite-tsconfig-paths": "^5.1.4"
+    "vite-tsconfig-paths": "^5.1.4",
+    "@eslint/js": "^9.39.2",
+    "@typescript-eslint/eslint-plugin": "^8.53.0",
+    "@typescript-eslint/parser": "^8.53.0",
+    "eslint": "^9.39.2",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^7.0.1"
   }
 }

@@ -1,9 +1,20 @@
 import React, { useState } from "react";
 import { Menu, X, ShoppingBag } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router";
+import { motion, AnimatePresence } from "motion/react";
 import svgPaths from "../../../imports/svg-qlugq798q6";
 
-const SHOP_CATEGORIES = ["Clothing", "Eyewear", "Shoes", "Accessories"];
+/* -------------------------------------------------------------------------- */
+/*                                  CONFIG                                    */
+/* -------------------------------------------------------------------------- */
+
+// ⚠️ use SLUGS here if your shop uses cat=slug
+const SHOP_CATEGORIES = [
+  { label: "Clothing", slug: "clothing" },
+  { label: "Eyewear", slug: "eyewear" },
+  { label: "Shoes", slug: "shoes" },
+  { label: "Accessories", slug: "accessories" },
+];
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -17,20 +28,23 @@ export function Navbar() {
   const isHome = location.pathname === "/";
   const isContact = location.pathname === "/contact";
 
-  const base =
-    "text-sm font-medium border-b-2 pb-1 transition";
+  const closeMenu = () => setIsOpen(false);
+
+  const base = "text-sm font-medium border-b-2 pb-1 transition";
   const underline = "border-[#0f00ff] text-black";
   const activeText = "text-black border-transparent";
-  const inactive =
-    "text-gray-500 hover:text-[#0f00ff] border-transparent";
+  const inactive = "text-gray-500 hover:text-[#0f00ff] border-transparent";
 
   return (
     <nav className="sticky top-0 z-50 w-full bg-white/80 backdrop-blur-md border-b border-gray-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
-
-          {/* Logo */}
-          <Link to="/" className="shrink-0 flex items-center gap-3">
+          {/* LOGO */}
+          <Link
+            to="/"
+            onClick={closeMenu}
+            className="shrink-0 flex items-center gap-3"
+          >
             <div className="bg-[#0f00ff] text-white px-2 py-1 rounded font-bold text-sm tracking-widest">
               KTM
             </div>
@@ -39,40 +53,38 @@ export function Navbar() {
             </span>
           </Link>
 
-          {/* Desktop Navigation */}
+          {/* ======================= DESKTOP ======================= */}
           <div className="hidden md:flex items-center space-x-8">
             <Link to="/" className={`${base} ${isHome ? underline : inactive}`}>
               Home
             </Link>
 
-            {/* SHOP ALL */}
             <Link
               to="/shop"
               className={`${base} ${
                 isShop && !activeCat
                   ? underline
                   : isShop
-                  ? activeText
-                  : inactive
+                    ? activeText
+                    : inactive
               }`}
             >
               Shop All
             </Link>
 
-            {/* CATEGORY LINKS */}
             {SHOP_CATEGORIES.map((cat) => (
               <Link
-                key={cat}
-                to={`/shop?cat=${cat}`}
+                key={cat.slug}
+                to={`/shop?cat=${cat.slug}`}
                 className={`${base} ${
                   isShop
-                    ? activeCat === cat
+                    ? activeCat === cat.slug
                       ? underline
                       : activeText
                     : inactive
                 }`}
               >
-                {cat}
+                {cat.label}
               </Link>
             ))}
 
@@ -84,7 +96,7 @@ export function Navbar() {
             </Link>
           </div>
 
-          {/* Right Buttons */}
+          {/* DESKTOP RIGHT */}
           <div className="hidden md:flex items-center gap-4">
             <a
               href="https://wa.me/9779741739698"
@@ -111,17 +123,91 @@ export function Navbar() {
             </button>
           </div>
 
-          {/* Mobile */}
+          {/* ======================= MOBILE TOGGLE ======================= */}
           <div className="md:hidden flex items-center">
             <button
-              onClick={() => setIsOpen(!isOpen)}
+              onClick={() => setIsOpen((v) => !v)}
               className="p-2"
+              aria-label="Toggle menu"
             >
               {isOpen ? <X /> : <Menu />}
             </button>
           </div>
         </div>
       </div>
+
+      {/* ======================= MOBILE MENU ======================= */}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.25 }}
+            className="md:hidden bg-white border-t border-gray-100"
+          >
+            <div className="px-6 py-6 flex flex-col gap-5">
+              <Link
+                to="/"
+                onClick={closeMenu}
+                className={`font-medium ${
+                  isHome ? "text-[#0f00ff]" : "text-gray-700"
+                }`}
+              >
+                Home
+              </Link>
+
+              <Link
+                to="/shop"
+                onClick={closeMenu}
+                className={`font-medium ${
+                  isShop && !activeCat ? "text-[#0f00ff]" : "text-gray-700"
+                }`}
+              >
+                Shop All
+              </Link>
+
+              <div className="flex flex-col gap-3 pl-2">
+                {SHOP_CATEGORIES.map((cat) => (
+                  <Link
+                    key={cat.slug}
+                    to={`/shop?cat=${cat.slug}`}
+                    onClick={closeMenu}
+                    className={`text-sm ${
+                      activeCat === cat.slug
+                        ? "text-[#0f00ff] font-medium"
+                        : "text-gray-600"
+                    }`}
+                  >
+                    {cat.label}
+                  </Link>
+                ))}
+              </div>
+
+              <Link
+                to="/contact"
+                onClick={closeMenu}
+                className={`font-medium ${
+                  isContact ? "text-[#0f00ff]" : "text-gray-700"
+                }`}
+              >
+                Contact
+              </Link>
+
+              <button
+                onClick={() => {
+                  closeMenu();
+                  navigate("/shop");
+                }}
+                className="mt-4 flex items-center justify-center gap-2 px-5 py-3 bg-[#0f00ff] text-white rounded-lg"
+              >
+                <ShoppingBag size={16} />
+                <span className="text-sm font-medium">Shop Now</span>
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </nav>
   );
 }

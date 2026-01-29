@@ -20,7 +20,11 @@ const MarqueeContent = () =>
         rounded-2xl overflow-hidden shrink-0 group cursor-pointer
       "
     >
-      <img src={img} alt="Instagram post" className="w-full h-full object-cover" />
+      <img
+        src={img}
+        alt="Instagram post"
+        className="w-full h-full object-cover"
+      />
 
       <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-sm">
         <div className="bg-white p-2 sm:p-3 rounded-full text-black">
@@ -36,11 +40,12 @@ export function SocialMedia() {
       {/* Heading */}
       <div className="text-center mb-10 sm:mb-14 px-4">
         <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-3">
-          Follow Us on Our{" "}
-          <span className="text-[#0f00ff]">Social media</span> Handle
+          Follow Us on Our <span className="text-[#0f00ff]">Social media</span>{" "}
+          Handle
         </h2>
         <p className="text-sm sm:text-base lg:text-lg text-gray-600">
-          Inspire and let yourself be inspired, from one unique fashion to another.
+          Inspire and let yourself be inspired, from one unique fashion to
+          another.
         </p>
       </div>
 

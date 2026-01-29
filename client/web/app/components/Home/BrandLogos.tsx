@@ -18,12 +18,10 @@ const logos = [
 export function BrandLogos() {
   // duplicate logos more on mobile to fill space
   const mobileLogos = [...logos, ...logos, ...logos];
-  const desktopLogos = [...logos, ...logos];
 
   return (
     <section className="py-0 border-b border-gray-100 bg-white overflow-hidden relative">
       <div className="w-full overflow-hidden">
-        
         {/* MOBILE */}
         <motion.div
           className="flex gap-4 sm:gap-6 md:gap-12"
@@ -44,7 +42,6 @@ export function BrandLogos() {
             </div>
           ))}
         </motion.div>
-
       </div>
     </section>
   );

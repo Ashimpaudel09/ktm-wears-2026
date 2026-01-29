@@ -4,7 +4,6 @@ import { motion } from "motion/react";
 import { useProductStore } from "@/lib/store/productStore";
 import { Badge } from "../ui/badge";
 import { ProductCard } from "../Product/Product";
-import { useProductNavigation } from "@/customHooks/product-navigation";
 
 /* -------------------------------------------------------------------------- */
 /*                           FEATURED COLLECTION                              */
@@ -15,7 +14,6 @@ export function FeaturedCollection() {
   const [currentPage, setCurrentPage] = useState(1);
 
   const { products, fetchProducts, whatsappContact } = useProductStore();
-  const gotoProductPage = useProductNavigation();
 
   const ITEMS_PER_PAGE = 8;
 
@@ -31,7 +29,7 @@ export function FeaturedCollection() {
       const categoryName =
         typeof product.category === "string"
           ? product.category
-          : product.category?.name ?? "";
+          : (product.category?.name ?? "");
       return activeFilter === "All" || categoryName === activeFilter;
     })
     .sort((a, b) => b._id.localeCompare(a._id)); // newest first by ObjectId
@@ -40,12 +38,12 @@ export function FeaturedCollection() {
   /*                                  PAGINATION                                */
   /* -------------------------------------------------------------------------- */
   const totalPages = Math.ceil(
-    filteredAndSortedProducts.length / ITEMS_PER_PAGE
+    filteredAndSortedProducts.length / ITEMS_PER_PAGE,
   );
 
   const paginatedProducts = filteredAndSortedProducts.slice(
     (currentPage - 1) * ITEMS_PER_PAGE,
-    currentPage * ITEMS_PER_PAGE
+    currentPage * ITEMS_PER_PAGE,
   );
 
   /* Reset page when filter changes */
@@ -98,15 +96,16 @@ export function FeaturedCollection() {
                 onClick={() =>
                   setActiveFilter(filter === "Clothing" ? "Clothes" : filter)
                 }
-                className={`px-6 py-2.5 rounded-full text-sm font-medium transition-all duration-300 shadow-sm ${activeFilter === filter ||
+                className={`px-6 py-2.5 rounded-full text-sm font-medium transition-all duration-300 shadow-sm ${
+                  activeFilter === filter ||
                   (activeFilter === "Clothes" && filter === "Clothing")
-                  ? "bg-[#0f00ff] text-white shadow-lg shadow-blue-500/30"
-                  : "bg-white text-gray-700 hover:bg-gray-50 border border-gray-200"
-                  }`}
+                    ? "bg-[#0f00ff] text-white shadow-lg shadow-blue-500/30"
+                    : "bg-white text-gray-700 hover:bg-gray-50 border border-gray-200"
+                }`}
               >
                 {filter}
               </motion.button>
-            )
+            ),
           )}
         </motion.div>
 
@@ -128,7 +127,6 @@ export function FeaturedCollection() {
 
         {/* PRODUCT GRID */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-
           {paginatedProducts.map((product) => (
             <ProductCard
               key={product._id}
@@ -137,7 +135,7 @@ export function FeaturedCollection() {
                 whatsappContact(
                   "9779863796211",
                   "Hello! I am interested in the product:",
-                  id
+                  id,
                 )
               }
             />
@@ -149,14 +147,13 @@ export function FeaturedCollection() {
           <div className="flex flex-wrap justify-center items-center gap-2 mt-12">
             {/* PREV */}
             <button
-              onClick={() =>
-                currentPage > 1 && setCurrentPage(currentPage - 1)
-              }
+              onClick={() => currentPage > 1 && setCurrentPage(currentPage - 1)}
               disabled={currentPage === 1}
-              className={`px-4 py-2 rounded-full text-sm font-medium border transition ${currentPage === 1
-                ? "opacity-40 cursor-not-allowed"
-                : "hover:bg-gray-100"
-                }`}
+              className={`px-4 py-2 rounded-full text-sm font-medium border transition ${
+                currentPage === 1
+                  ? "opacity-40 cursor-not-allowed"
+                  : "hover:bg-gray-100"
+              }`}
             >
               Prev
             </button>
@@ -168,10 +165,11 @@ export function FeaturedCollection() {
                 <button
                   key={page}
                   onClick={() => setCurrentPage(page)}
-                  className={`w-10 h-10 flex items-center justify-center rounded-full text-sm font-medium border transition ${page === currentPage
-                    ? "bg-[#0f00ff] text-white border-[#0f00ff] shadow-md"
-                    : "hover:bg-gray-100 text-gray-700"
-                    }`}
+                  className={`w-10 h-10 flex items-center justify-center rounded-full text-sm font-medium border transition ${
+                    page === currentPage
+                      ? "bg-[#0f00ff] text-white border-[#0f00ff] shadow-md"
+                      : "hover:bg-gray-100 text-gray-700"
+                  }`}
                 >
                   {page}
                 </button>
@@ -184,10 +182,11 @@ export function FeaturedCollection() {
                 currentPage < totalPages && setCurrentPage(currentPage + 1)
               }
               disabled={currentPage === totalPages}
-              className={`px-4 py-2 rounded-full text-sm font-medium border transition ${currentPage === totalPages
-                ? "opacity-40 cursor-not-allowed"
-                : "hover:bg-gray-100"
-                }`}
+              className={`px-4 py-2 rounded-full text-sm font-medium border transition ${
+                currentPage === totalPages
+                  ? "opacity-40 cursor-not-allowed"
+                  : "hover:bg-gray-100"
+              }`}
             >
               Next
             </button>
