@@ -11,7 +11,7 @@ import { Footer } from "@/components/Home/Footer";
 
 export function meta({}: Route.MetaArgs) {
   return [
-    { title: "New React Router App" },
+    { title: "KTM Wears" },
     { name: "description", content: "Welcome to React Router!" },
   ];
 }
@@ -25,8 +25,8 @@ export default function Home() {
         <Categories />
         <FeaturedCollection />
         <BrandHighlight />
-        <SocialMedia />
         <Benefits />
+        <SocialMedia />
       </main>
     </div>
   );

@@ -74,7 +74,7 @@ export function FeaturedCollection() {
             New Collection 2026
           </Badge>
           <h2 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 bg-clip-text text-transparent">
-            Featured Collection
+            Featured <span className="text-[#0f00ff]">Collection</span>
           </h2>
           <p className="text-gray-600 text-lg max-w-2xl mx-auto">
             Explore the latest trends in eyewear and fashion.
@@ -98,12 +98,11 @@ export function FeaturedCollection() {
                 onClick={() =>
                   setActiveFilter(filter === "Clothing" ? "Clothes" : filter)
                 }
-                className={`px-6 py-2.5 rounded-full text-sm font-medium transition-all duration-300 shadow-sm ${
-                  activeFilter === filter ||
+                className={`px-6 py-2.5 rounded-full text-sm font-medium transition-all duration-300 shadow-sm ${activeFilter === filter ||
                   (activeFilter === "Clothes" && filter === "Clothing")
-                    ? "bg-[#0f00ff] text-white shadow-lg shadow-blue-500/30"
-                    : "bg-white text-gray-700 hover:bg-gray-50 border border-gray-200"
-                }`}
+                  ? "bg-[#0f00ff] text-white shadow-lg shadow-blue-500/30"
+                  : "bg-white text-gray-700 hover:bg-gray-50 border border-gray-200"
+                  }`}
               >
                 {filter}
               </motion.button>
@@ -128,7 +127,8 @@ export function FeaturedCollection() {
         )}
 
         {/* PRODUCT GRID */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+
           {paginatedProducts.map((product) => (
             <ProductCard
               key={product._id}
@@ -153,11 +153,10 @@ export function FeaturedCollection() {
                 currentPage > 1 && setCurrentPage(currentPage - 1)
               }
               disabled={currentPage === 1}
-              className={`px-4 py-2 rounded-full text-sm font-medium border transition ${
-                currentPage === 1
-                  ? "opacity-40 cursor-not-allowed"
-                  : "hover:bg-gray-100"
-              }`}
+              className={`px-4 py-2 rounded-full text-sm font-medium border transition ${currentPage === 1
+                ? "opacity-40 cursor-not-allowed"
+                : "hover:bg-gray-100"
+                }`}
             >
               Prev
             </button>
@@ -169,11 +168,10 @@ export function FeaturedCollection() {
                 <button
                   key={page}
                   onClick={() => setCurrentPage(page)}
-                  className={`w-10 h-10 flex items-center justify-center rounded-full text-sm font-medium border transition ${
-                    page === currentPage
-                      ? "bg-[#0f00ff] text-white border-[#0f00ff] shadow-md"
-                      : "hover:bg-gray-100 text-gray-700"
-                  }`}
+                  className={`w-10 h-10 flex items-center justify-center rounded-full text-sm font-medium border transition ${page === currentPage
+                    ? "bg-[#0f00ff] text-white border-[#0f00ff] shadow-md"
+                    : "hover:bg-gray-100 text-gray-700"
+                    }`}
                 >
                   {page}
                 </button>
@@ -186,11 +184,10 @@ export function FeaturedCollection() {
                 currentPage < totalPages && setCurrentPage(currentPage + 1)
               }
               disabled={currentPage === totalPages}
-              className={`px-4 py-2 rounded-full text-sm font-medium border transition ${
-                currentPage === totalPages
-                  ? "opacity-40 cursor-not-allowed"
-                  : "hover:bg-gray-100"
-              }`}
+              className={`px-4 py-2 rounded-full text-sm font-medium border transition ${currentPage === totalPages
+                ? "opacity-40 cursor-not-allowed"
+                : "hover:bg-gray-100"
+                }`}
             >
               Next
             </button>

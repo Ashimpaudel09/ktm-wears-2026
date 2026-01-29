@@ -23,7 +23,7 @@ const benefits = [
 
 export function Benefits() {
   return (
-    <section className="bg-white border-t border-gray-100 py-0 sm:py-0 lg:py-0">
+    <section className="bg-white border-t border-gray-100 pb-4">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* MOBILE: Landscape rows */}

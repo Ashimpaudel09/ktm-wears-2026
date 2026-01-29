@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import WhatsAppIcon from "@/components/Home/WhatsAppIcon";
 import { Heart } from "lucide-react";
+import { useNavigate } from "react-router";
 
 interface ProductCardProps {
   product: any;
@@ -10,6 +11,7 @@ interface ProductCardProps {
 
 export function ProductCard({ product, onWhatsapp }: ProductCardProps) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const navigate = useNavigate();
 
   const images =
     product.images && product.images.length > 0
@@ -36,7 +38,7 @@ export function ProductCard({ product, onWhatsapp }: ProductCardProps) {
   };
 
   return (
-    <div className="group cursor-pointer w-full md:w-auto">
+    <div className="group cursor-pointer w-full md:w-auto p-1" onClick={()=>{navigate(`/product/${product._id}`)}}>
       <div className="relative rounded-3xl overflow-hidden bg-gray-100 mb-4
                       aspect-[3/3.5] md:aspect-[3/3.5]">
         <img
@@ -68,7 +70,10 @@ export function ProductCard({ product, onWhatsapp }: ProductCardProps) {
         <div className="hidden md:flex absolute opacity-0 bottom-4 left-4 right-4 
                         translate-y-full group-hover:translate-y-0 
                         group-hover:opacity-100 transition-transform duration-300 flex gap-2">
-          <button className="flex-1 bg-white/90 backdrop-blur-md text-gray-900 py-3 rounded-xl text-sm font-semibold hover:bg-white shadow-lg">
+          <button
+          onClick={()=>{navigate(`/product/${product._id}`)}}
+
+          className="flex-1 bg-white/90 backdrop-blur-md text-gray-900 py-3 rounded-xl text-sm font-semibold hover:bg-white shadow-lg">
             View Details
           </button>
           <button
@@ -91,7 +96,7 @@ export function ProductCard({ product, onWhatsapp }: ProductCardProps) {
           </h3>
           <p className="text-[10px] md:text-sm text-gray-500">{categoryName}</p>
         </div>
-        <div className="flex flex-col items-center gap-2 mt-2 md:mt-0">
+        <div className="flex flex-col gap-2 md:mt-0">
           {product.price > 0 && (
             <h3 className="font-semibold text-sm md:text-base text-gray-900">
               Rs.{product.price}
