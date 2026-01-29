@@ -18,9 +18,8 @@ export function meta({}: Route.MetaArgs) {
 
 export default function Home() {
   return(
-     <div className="min-h-screen bg-white font-sans text-gray-900 selection:bg-[#0f00ff] selection:text-white">
-      <Navbar />
-      <main>
+    <div>
+      <main className="space-y-19">
         <Hero />
         <BrandLogos />
         <Categories />
@@ -29,7 +28,6 @@ export default function Home() {
         <SocialMedia />
         <Benefits />
       </main>
-      <Footer />
     </div>
   );
 }

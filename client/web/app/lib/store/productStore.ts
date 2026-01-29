@@ -2,7 +2,6 @@ import { create } from "zustand";
 import type { Product } from "../../types";
 import { productsApi } from "../api/products";
 import toast from "react-hot-toast";
-import { useNavigate } from "react-router";
 
 interface Pagination {
   total: number;
@@ -25,7 +24,7 @@ interface ProductState {
   updateProduct: (id: string, formData: FormData) => Promise<void>;
   deleteProduct: (id: string) => Promise<void>;
   whatsappContact: (phoneNumber: string, message: string, productId: string) => void;
-  gotoProductPage: (id: string) => void;
+  resetProducts: () => void;
 }
 
 export const useProductStore = create<ProductState>((set, get) => ({
@@ -37,6 +36,7 @@ export const useProductStore = create<ProductState>((set, get) => ({
     limit: 12,
     totalPages: 0,
   },
+  
 
   fetchProducts: async (filters: Record<string, unknown> = {}) => {
     set({ loading: true });
@@ -101,10 +101,6 @@ export const useProductStore = create<ProductState>((set, get) => ({
       throw error;
     }
   },
-  gotoProductPage: (id: string) => {
-    const navigate = useNavigate();
-    navigate(`/product/${id}`);
-  },
  whatsappContact: (
   phoneNumber: string,
   message: string,
@@ -120,5 +116,9 @@ export const useProductStore = create<ProductState>((set, get) => ({
 
   window.open(url, "_blank");
 },
+resetProducts: () => {
+    set({ products: [] });
+  },
 
 }));
+

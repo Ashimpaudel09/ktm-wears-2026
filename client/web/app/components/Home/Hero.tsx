@@ -6,7 +6,7 @@ import { motion } from 'motion/react';
 
 export function Hero() {
   return (
-    <section className="relative w-full pt-2 bg-white overflow-hidden pb-16 lg:pb-24">
+    <section className="relative w-full pt-2 bg-white overflow-hidden pb-3 lg:pb-3">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
           

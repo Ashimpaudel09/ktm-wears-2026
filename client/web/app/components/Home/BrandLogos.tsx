@@ -1,5 +1,5 @@
-
-import imgSsEntryPassword1 from '../assets/asos.png';
+import { motion } from "motion/react";
+import imgSsEntryPassword1 from "../assets/asos.png";
 import imgSsEntryPassword2 from "../assets/celine.png";
 import imgSsEntryPassword3 from "../assets/nike.png";
 import imgSsEntryPassword4 from "../assets/miu.png";
@@ -16,48 +16,35 @@ const logos = [
 ];
 
 export function BrandLogos() {
+  // duplicate logos more on mobile to fill space
+  const mobileLogos = [...logos, ...logos, ...logos];
+  const desktopLogos = [...logos, ...logos];
+
   return (
-    <section className="py-12 border-b border-gray-100 bg-white overflow-hidden">
-      <style>{`
-        @keyframes scroll {
-          from {
-            transform: translateX(0);
-          }
-          to {
-            transform: translateX(-100%);
-          }
-        }
+    <section className="py-0 border-b border-gray-100 bg-white overflow-hidden relative">
+      <div className="w-full overflow-hidden">
         
-        .animate-scroll {
-          animation: scroll 20s linear infinite;
-        }
-        
-        .animate-scroll:hover {
-          animation-play-state: paused;
-        }
-      `}</style>
-      
-      <div className="relative flex">
-        {/* Render the logos twice for seamless infinite scroll */}
-        {[...Array(2)].map((_, setIndex) => (
-          <div 
-            key={setIndex}
-            className="flex items-center gap-12 md:gap-16 px-8 animate-scroll"
-          >
-            {logos.map((logo, index) => (
-              <div 
-                key={`${setIndex}-${index}`} 
-                className="h-8 md:h-12 flex-shrink-0 flex items-center justify-center opacity-60 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-500"
-              >
-                <img 
-                  src={logo} 
-                  alt={`Brand partner ${index + 1}`} 
-                  className="max-h-full w-[120px] object-contain mix-blend-multiply"
-                />
-              </div>
-            ))}
-          </div>
-        ))}
+        {/* MOBILE */}
+        <motion.div
+          className="flex gap-4 sm:gap-6 md:gap-12"
+          animate={{ x: ["0%", "-50%"] }}
+          transition={{ repeat: Infinity, duration: 20, ease: "linear" }}
+          whileHover={{ x: "0%" }}
+        >
+          {mobileLogos.map((logo, i) => (
+            <div
+              key={i}
+              className="h-8 sm:h-10 md:h-14 flex-shrink-0 flex items-center justify-center opacity-60 grayscale hover:opacity-100 hover:grayscale-0 transition-all duration-500"
+            >
+              <img
+                src={logo}
+                alt={`Brand partner ${i + 1}`}
+                className="max-h-full w-[80px] sm:w-[100px] md:w-[120px] object-contain"
+              />
+            </div>
+          ))}
+        </motion.div>
+
       </div>
     </section>
   );

@@ -1,204 +1,201 @@
 import React, { useEffect, useState } from "react";
-import { Heart, ShoppingBag, ArrowLeft, ArrowRight } from "lucide-react";
+import { ShoppingBag } from "lucide-react";
 import { motion } from "motion/react";
 import { useProductStore } from "@/lib/store/productStore";
 import { Badge } from "../ui/badge";
-import { Button } from "../ui/button";
-import WhatsAppIcon from "./WhatsAppIcon";
-
+import { ProductCard } from "../Product/Product";
+import { useProductNavigation } from "@/customHooks/product-navigation";
 
 /* -------------------------------------------------------------------------- */
-/*                            FEATURED COLLECTION                              */
+/*                           FEATURED COLLECTION                              */
 /* -------------------------------------------------------------------------- */
 
 export function FeaturedCollection() {
   const [activeFilter, setActiveFilter] = useState("All");
-  const [imageIndexes, setImageIndexes] = useState<Record<string, number>>({});
+  const [currentPage, setCurrentPage] = useState(1);
 
-  const { products, fetchProducts, gotoProductPage, whatsappContact } = useProductStore();
+  const { products, fetchProducts, whatsappContact } = useProductStore();
+  const gotoProductPage = useProductNavigation();
+
+  const ITEMS_PER_PAGE = 8;
 
   useEffect(() => {
-    fetchProducts({ featured: true, limit: 8 });
+    fetchProducts({ featured: true }); // fetch all featured
   }, [fetchProducts]);
 
-  const filteredProducts = products.filter((product) => {
-
-    const categoryName =
-      typeof product.category === "string"
-        ? product.category
-        : product.category?.name ?? "";
-    return categoryName === activeFilter || activeFilter === "All";
-  })
+  /* -------------------------------------------------------------------------- */
+  /*                       FILTER + SORT BY _id (Newest First)                  */
+  /* -------------------------------------------------------------------------- */
+  const filteredAndSortedProducts = [...products]
+    .filter((product) => {
+      const categoryName =
+        typeof product.category === "string"
+          ? product.category
+          : product.category?.name ?? "";
+      return activeFilter === "All" || categoryName === activeFilter;
+    })
+    .sort((a, b) => b._id.localeCompare(a._id)); // newest first by ObjectId
 
   /* -------------------------------------------------------------------------- */
-  /*                              IMAGE HANDLERS                                */
+  /*                                  PAGINATION                                */
   /* -------------------------------------------------------------------------- */
+  const totalPages = Math.ceil(
+    filteredAndSortedProducts.length / ITEMS_PER_PAGE
+  );
 
+  const paginatedProducts = filteredAndSortedProducts.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE
+  );
 
-  const prevImage = (productId: string, length: number) => {
-    setImageIndexes((prev) => ({
-      ...prev,
-      [productId]:
-        prev[productId] === 0 ? length - 1 : (prev[productId] ?? 0) - 1,
-    }));
-  };
-
-  const nextImage = (productId: string, length: number) => {
-    setImageIndexes((prev) => ({
-      ...prev,
-      [productId]:
-        prev[productId] === length - 1 ? 0 : (prev[productId] ?? 0) + 1,
-    }));
-  };
+  /* Reset page when filter changes */
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [activeFilter]);
 
   /* -------------------------------------------------------------------------- */
-  /*                                   RENDER                                   */
+  /*                                  RENDER                                    */
   /* -------------------------------------------------------------------------- */
-
   return (
-    <section className="py-20 bg-gray-50/50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="w-full py-0 px-4 bg-gradient-to-b from-white to-gray-50">
+      <div className="max-w-7xl mx-auto">
+        {/* HEADER (unchanged) */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="text-center mb-12"
+        >
+          <Badge
+            color="blue"
+            className="mb-4 px-4 py-1.5 text-xs font-semibold tracking-wider uppercase border-[#0f00ff] text-[#0f00ff]"
+          >
+            New Collection 2026
+          </Badge>
+          <h2 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 bg-clip-text text-transparent">
+            Featured Collection
+          </h2>
+          <p className="text-gray-600 text-lg max-w-2xl mx-auto">
+            Explore the latest trends in eyewear and fashion.
+          </p>
+        </motion.div>
 
-        {/* Header */}
-        <div className="flex flex-col lg:flex-row justify-between items-end mb-12 gap-8">
-          <div className="max-w-2xl">
-            <span className="text-[#0f00ff] text-xs font-bold uppercase tracking-widest">
-              New Collection 2026
-            </span>
-            <h2 className="text-4xl font-bold text-gray-900 mt-2">
-              Featured <span className="text-[#0f00ff]">Collection</span>
-            </h2>
-            <p className="text-gray-600 text-lg mt-4">
-              Explore the latest trends in eyewear and fashion.
-            </p>
-          </div>
-
-          <div className="flex items-center gap-4">
-            <div className="bg-white p-1 rounded-full border shadow-sm flex">
-              {["All", "Eyewear", "Clothing", "Accessories", "Shoes"].map((filter) => (
-                <button
-                  key={filter}
-                  onClick={() =>
-                    setActiveFilter(filter === "Clothing" ? "Clothes" : filter)
-                  }
-                  className={`px-6 py-2 rounded-full text-sm font-medium transition-all
-                    ${activeFilter === filter ||
-                      (activeFilter === "Clothes" && filter === "Clothing")
-                      ? "bg-[#0f00ff] text-white"
-                      : "text-gray-600 hover:bg-gray-100"
-                    }`}
-                >
-                  {filter}
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Product Grid */}
-        {filteredProducts.length === 0 && (
-          <p className="text-gray-500 text-center w-full">No products found for the selected category.</p>
-        )}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-          {filteredProducts.map((product) => {
-            const categoryName =
-              typeof product.category === "string"
-                ? product.category
-                : product.category?.name ?? "";
-
-            const images =
-              product.images?.length > 0
-                ? product.images.map((img: any) => img.url ?? img)
-                : [product.images];
-
-            const currentIndex = imageIndexes[product._id] ?? 0;
-
-            return (
-              <motion.div
-                key={product._id}
-                layout
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="group"
+        {/* FILTER BUTTONS (unchanged) */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="flex flex-wrap justify-center gap-3 mb-12"
+        >
+          {["All", "Eyewear", "Clothing", "Accessories", "Shoes"].map(
+            (filter) => (
+              <motion.button
+                key={filter}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() =>
+                  setActiveFilter(filter === "Clothing" ? "Clothes" : filter)
+                }
+                className={`px-6 py-2.5 rounded-full text-sm font-medium transition-all duration-300 shadow-sm ${
+                  activeFilter === filter ||
+                  (activeFilter === "Clothes" && filter === "Clothing")
+                    ? "bg-[#0f00ff] text-white shadow-lg shadow-blue-500/30"
+                    : "bg-white text-gray-700 hover:bg-gray-50 border border-gray-200"
+                }`}
               >
-                <div className="relative aspect-3/4 rounded-3xl overflow-hidden bg-gray-100 mb-4">
+                {filter}
+              </motion.button>
+            )
+          )}
+        </motion.div>
 
-                  {/* Image */}
-                  <img
-                    src={images[currentIndex]}
-                    alt={product.name}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                  />
+        {/* EMPTY STATE */}
+        {filteredAndSortedProducts.length === 0 && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="text-center py-16"
+          >
+            <div className="text-gray-400 mb-4">
+              <ShoppingBag className="w-16 h-16 mx-auto mb-4" />
+            </div>
+            <p className="text-gray-600 text-lg">
+              No products found for the selected category.
+            </p>
+          </motion.div>
+        )}
 
-                  {/* Slider Controls */}
-                  {images.length > 1 && (
-                    <>
-                      <button
-                        onClick={() =>
-                          prevImage(product._id, images.length)
-                        }
-                        className="absolute left-3 top-1/2 -translate-y-1/2 bg-white/80 backdrop-blur p-2 rounded-full opacity-0 group-hover:opacity-100 transition"
-                      >
-                        <ArrowLeft size={18} />
-                      </button>
-
-                      <button
-                        onClick={() =>
-                          nextImage(product._id, images.length)
-                        }
-                        className="absolute right-3 top-1/2 -translate-y-1/2 bg-white/80 backdrop-blur p-2 rounded-full opacity-0 group-hover:opacity-100 transition"
-                      >
-                        <ArrowRight size={18} />
-                      </button>
-                    </>
-                  )}
-
-                  {/* Wishlist */}
-
-                  <button className="absolute right-4 top-4  ">
-                    <Badge color="blue">Featured</Badge>
-                  </button>
-
-
-                </div>
-
-                {/* Meta */}
-                <div className="flex justify-between items-start">
-                  <div>
-                    <h3 className="font-semibold text-lg">{product.name}</h3>
-                    <p className="text-sm text-gray-500">
-                      {categoryName}
-                    </p>
-                  </div>
-                  <span className="font-semibold">Rs.{product.price}</span>
-                  {/* Cart */}
-                  <div className="">
-
-                  </div>
-
-                </div>
-                <div className="flex gap-2">
-                  <Button
-                    className="flex-1 bg-green-500 py-3 rounded-xl font-semibold"
-                    onClick={() => whatsappContact("9779863796211",
-                      "Hello ! I am interested in the product: ",
-                      product._id)}
-                  >
-                    <WhatsAppIcon /> Contact
-                  </Button>
-                  <Button
-                    className="bg-black text-white p-3 rounded-xl"
-                    onClick={() => gotoProductPage(product._id)}
-
-                  >
-                    See Detail <ArrowRight size={16} />
-                  </Button>
-                </div>
-
-              </motion.div>
-            );
-          })}
+        {/* PRODUCT GRID */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          {paginatedProducts.map((product) => (
+            <ProductCard
+              key={product._id}
+              product={product}
+              onWhatsapp={(id: string) =>
+                whatsappContact(
+                  "9779863796211",
+                  "Hello! I am interested in the product:",
+                  id
+                )
+              }
+            />
+          ))}
         </div>
+
+        {/* PAGINATION (modern UI) */}
+        {totalPages > 1 && (
+          <div className="flex flex-wrap justify-center items-center gap-2 mt-12">
+            {/* PREV */}
+            <button
+              onClick={() =>
+                currentPage > 1 && setCurrentPage(currentPage - 1)
+              }
+              disabled={currentPage === 1}
+              className={`px-4 py-2 rounded-full text-sm font-medium border transition ${
+                currentPage === 1
+                  ? "opacity-40 cursor-not-allowed"
+                  : "hover:bg-gray-100"
+              }`}
+            >
+              Prev
+            </button>
+
+            {/* PAGE NUMBERS */}
+            {Array.from({ length: totalPages }).map((_, i) => {
+              const page = i + 1;
+              return (
+                <button
+                  key={page}
+                  onClick={() => setCurrentPage(page)}
+                  className={`w-10 h-10 flex items-center justify-center rounded-full text-sm font-medium border transition ${
+                    page === currentPage
+                      ? "bg-[#0f00ff] text-white border-[#0f00ff] shadow-md"
+                      : "hover:bg-gray-100 text-gray-700"
+                  }`}
+                >
+                  {page}
+                </button>
+              );
+            })}
+
+            {/* NEXT */}
+            <button
+              onClick={() =>
+                currentPage < totalPages && setCurrentPage(currentPage + 1)
+              }
+              disabled={currentPage === totalPages}
+              className={`px-4 py-2 rounded-full text-sm font-medium border transition ${
+                currentPage === totalPages
+                  ? "opacity-40 cursor-not-allowed"
+                  : "hover:bg-gray-100"
+              }`}
+            >
+              Next
+            </button>
+          </div>
+        )}
       </div>
     </section>
   );
