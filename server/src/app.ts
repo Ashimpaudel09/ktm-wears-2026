@@ -69,7 +69,6 @@ app.get('/api/auth/check', adminAuth, (_req: Request, res: Response) => {
 app.use('/api/products', productRoutes);
 app.use('/api/categories', categoryRoutes);
 
-if (process.env.NODE_ENV === 'production') {
   const rootDir = path.resolve(__dirname, '../../');
   const adminBuildPath = path.join(rootDir, 'client/admin/build/client');
 
@@ -82,16 +81,15 @@ if (process.env.NODE_ENV === 'production') {
   });
 
 
-  const clientBuildPath = path.join(rootDir, 'client/admin/build/client');
+  const clientBuildPath = path.join(rootDir, 'client/web/build/client');
 
-  // Serve static files (JS/CSS/assets)
-  app.use('/client', express.static(adminBuildPath));
+ // Serve static files at ROOT
+  app.use(express.static(clientBuildPath));
 
-  // Catch-all for SPA — matches /admin, /admin/, and all subpaths
-  app.get(/^\/client(\/.*)?$/, (req: Request, res: Response) => {
-    res.sendFile(path.join(clientBuildPath, 'index.html'));
-  });
-}
+  // SPA fallback
+  app.get(/^(?!\/api).*/, (_req, res) => {
+  res.sendFile(path.join(clientBuildPath, 'index.html'));
+});
 
 /* ===================== ERROR HANDLING ===================== */
 app.use(notFound);
