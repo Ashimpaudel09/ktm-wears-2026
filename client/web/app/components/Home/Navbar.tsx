@@ -1,20 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Menu, X, ShoppingBag } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router";
 import { motion, AnimatePresence } from "motion/react";
 import svgPaths from "../../../imports/svg-qlugq798q6";
+import { useCategoryStore } from "@/lib/store/categoryStore";
 
 /* -------------------------------------------------------------------------- */
-/*                                  CONFIG                                    */
+/*                                  NAVBAR                                     */
 /* -------------------------------------------------------------------------- */
-
-// ⚠️ use SLUGS here if your shop uses cat=slug
-const SHOP_CATEGORIES = [
-  { label: "Clothing", slug: "clothing" },
-  { label: "Eyewear", slug: "eyewear" },
-  { label: "Shoes", slug: "shoes" },
-  { label: "Accessories", slug: "accessories" },
-];
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -22,13 +15,29 @@ export function Navbar() {
   const location = useLocation();
 
   const params = new URLSearchParams(location.search);
-  const activeCat = params.get("cat");
+  const activeCat = params.get("cat") ?? null;
 
   const isShop = location.pathname === "/shop";
   const isHome = location.pathname === "/";
   const isContact = location.pathname === "/contact";
 
   const closeMenu = () => setIsOpen(false);
+
+  // Fetch categories from store
+  const categories = useCategoryStore((s) => s.categories);
+  const fetchCategories = useCategoryStore((s) => s.fetchCategories);
+
+  useEffect(() => {
+    fetchCategories();
+  }, [fetchCategories]);
+
+  // compute top 4 categories (use slug if provided, fallback to slugified name)
+  const topCategories = useMemo(() => {
+    return categories.slice(0, 4).map((c) => {
+      const slug = c.slug ?? c.name?.toLowerCase().replace(/\s+/g, "-");
+      return { label: c.name, slug };
+    });
+  }, [categories]);
 
   const base = "text-sm font-medium border-b-2 pb-1 transition";
   const underline = "border-[#0f00ff] text-black";
@@ -62,17 +71,13 @@ export function Navbar() {
             <Link
               to="/shop"
               className={`${base} ${
-                isShop && !activeCat
-                  ? underline
-                  : isShop
-                    ? activeText
-                    : inactive
+                isShop && !activeCat ? underline : isShop ? activeText : inactive
               }`}
             >
               Shop All
             </Link>
 
-            {SHOP_CATEGORIES.map((cat) => (
+            {topCategories.map((cat) => (
               <Link
                 key={cat.slug}
                 to={`/shop?cat=${cat.slug}`}
@@ -150,9 +155,7 @@ export function Navbar() {
               <Link
                 to="/"
                 onClick={closeMenu}
-                className={`font-medium ${
-                  isHome ? "text-[#0f00ff]" : "text-gray-700"
-                }`}
+                className={`font-medium ${isHome ? "text-[#0f00ff]" : "text-gray-700"}`}
               >
                 Home
               </Link>
@@ -160,23 +163,19 @@ export function Navbar() {
               <Link
                 to="/shop"
                 onClick={closeMenu}
-                className={`font-medium ${
-                  isShop && !activeCat ? "text-[#0f00ff]" : "text-gray-700"
-                }`}
+                className={`font-medium ${isShop && !activeCat ? "text-[#0f00ff]" : "text-gray-700"}`}
               >
                 Shop All
               </Link>
 
               <div className="flex flex-col gap-3 pl-2">
-                {SHOP_CATEGORIES.map((cat) => (
+                {topCategories.map((cat) => (
                   <Link
                     key={cat.slug}
                     to={`/shop?cat=${cat.slug}`}
                     onClick={closeMenu}
                     className={`text-sm ${
-                      activeCat === cat.slug
-                        ? "text-[#0f00ff] font-medium"
-                        : "text-gray-600"
+                      activeCat === cat.slug ? "text-[#0f00ff] font-medium" : "text-gray-600"
                     }`}
                   >
                     {cat.label}
@@ -187,9 +186,7 @@ export function Navbar() {
               <Link
                 to="/contact"
                 onClick={closeMenu}
-                className={`font-medium ${
-                  isContact ? "text-[#0f00ff]" : "text-gray-700"
-                }`}
+                className={`font-medium ${isContact ? "text-[#0f00ff]" : "text-gray-700"}`}
               >
                 Contact
               </Link>
