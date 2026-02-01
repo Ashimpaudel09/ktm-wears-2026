@@ -7,12 +7,7 @@ type Props = {
   loading: boolean;
 };
 
-export function ShopPagination({
-  page,
-  setPage,
-  pagination,
-  loading,
-}: Props) {
+export function ShopPagination({ page, setPage, pagination, loading }: Props) {
   const totalPages = pagination?.totalPages ?? 1;
 
   if (totalPages <= 1 || loading) return null;
@@ -23,9 +18,7 @@ export function ShopPagination({
         onClick={() => page > 1 && setPage(page - 1)}
         disabled={page === 1}
         className={`px-4 py-2 rounded-full border text-sm ${
-          page === 1
-            ? "opacity-40 cursor-not-allowed"
-            : "hover:bg-gray-100"
+          page === 1 ? "opacity-40 cursor-not-allowed" : "hover:bg-gray-100"
         }`}
       >
         Prev

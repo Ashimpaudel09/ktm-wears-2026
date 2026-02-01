@@ -1,9 +1,9 @@
 import { motion, AnimatePresence } from "motion/react";
 import { ProductCard } from "@/components/Product/Product";
-import type { ProductImage } from "@/types";
+import type { Product, ProductImage } from "@/types";
 
 type Props = {
-  products: any[];
+  products: Product[];
   loading: boolean;
   activeCategory: string;
   search: string;
@@ -53,21 +53,20 @@ export function ProductGrid({
           className="grid grid-cols-2 md:grid-cols-4 gap-3"
         >
           {products.map((product) => {
-            const images: ProductImage[] =
-              product.images?.length
-                ? product.images.map((img: any) => ({
-                    url: img.url || "/placeholder.jpg",
-                    publicId: img.publicId || "placeholder",
-                    alt: img.alt || product.name,
-                    id: img.id,
-                  }))
-                : [
-                    {
-                      url: "/placeholder.jpg",
-                      publicId: "placeholder",
-                      alt: product.name,
-                    },
-                  ];
+            const images: ProductImage[] = product.images?.length
+              ? product.images.map((img: ProductImage) => ({
+                  url: img.url || "/placeholder.jpg",
+                  publicId: img.publicId || "placeholder",
+                  alt: img.alt || product.name,
+                  id: img.id,
+                }))
+              : [
+                  {
+                    url: "/placeholder.jpg",
+                    publicId: "placeholder",
+                    alt: product.name,
+                  },
+                ];
 
             return (
               <ProductCard
@@ -76,8 +75,8 @@ export function ProductGrid({
                 onWhatsapp={(id) =>
                   window.open(
                     `https://wa.me/9779863796211?text=${encodeURIComponent(
-                      `Hello! I am interested in this product: https://${window.location.host}/product/${id}`
-                    )}`
+                      `Hello! I am interested in this product: https://${window.location.host}/product/${id}`,
+                    )}`,
                   )
                 }
               />

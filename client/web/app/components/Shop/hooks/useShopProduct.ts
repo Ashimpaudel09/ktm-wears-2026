@@ -16,13 +16,8 @@ export function useShopProducts() {
   const categories = useCategoryStore((s) => s.categories);
   const fetchCategories = useCategoryStore((s) => s.fetchCategories);
 
-  const {
-    products,
-    pagination,
-    loading,
-    fetchProducts,
-    resetProducts,
-  } = useProductStore();
+  const { products, pagination, loading, fetchProducts, resetProducts } =
+    useProductStore();
 
   /* fetch categories once */
   useEffect(() => {
@@ -40,12 +35,10 @@ export function useShopProducts() {
     (slug: string) => {
       if (slug === "all") return undefined;
       return categories.find(
-        (c) =>
-          (c.slug ??
-            c.name.toLowerCase().replace(/\s+/g, "-")) === slug
+        (c) => (c.slug ?? c.name.toLowerCase().replace(/\s+/g, "-")) === slug,
       )?._id;
     },
-    [categories]
+    [categories],
   );
 
   const loadProducts = useCallback(async () => {

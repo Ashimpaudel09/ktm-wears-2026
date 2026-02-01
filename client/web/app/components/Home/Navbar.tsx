@@ -71,7 +71,11 @@ export function Navbar() {
             <Link
               to="/shop"
               className={`${base} ${
-                isShop && !activeCat ? underline : isShop ? activeText : inactive
+                isShop && !activeCat
+                  ? underline
+                  : isShop
+                    ? activeText
+                    : inactive
               }`}
             >
               Shop All
@@ -175,7 +179,9 @@ export function Navbar() {
                     to={`/shop?cat=${cat.slug}`}
                     onClick={closeMenu}
                     className={`text-sm ${
-                      activeCat === cat.slug ? "text-[#0f00ff] font-medium" : "text-gray-600"
+                      activeCat === cat.slug
+                        ? "text-[#0f00ff] font-medium"
+                        : "text-gray-600"
                     }`}
                   >
                     {cat.label}

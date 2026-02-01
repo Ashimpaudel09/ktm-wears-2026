@@ -14,7 +14,7 @@ export default function ShopPage() {
   // Use the new hook that filters and sorts by flexible search
   const products = useFilteredAndSortedProducts(
     shop.products,
-    shop.debouncedSearch
+    shop.debouncedSearch,
   );
 
   return (
