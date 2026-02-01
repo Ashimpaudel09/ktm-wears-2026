@@ -29,9 +29,9 @@ export const productsApi = {
   },
 
   getById: async (id: string) => {
-    const { data } = await api.get<ApiResponse<Product>>(`/products/${id}`);
-    return data;
-  },
+  const { data } = await api.get<ApiResponse<Product>>(`/products/${id}`);
+  return data.data; // <-- unwrap
+},
 
   create: async (formData: FormData) => {
     const { data } = await api.post<ApiResponse<Product>>(

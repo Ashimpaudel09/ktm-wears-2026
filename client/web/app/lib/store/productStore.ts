@@ -22,6 +22,7 @@ interface ProductState {
   fetchProducts: (filters?: Record<string, unknown>) => Promise<void>;
   createProduct: (formData: FormData) => Promise<void>;
   updateProduct: (id: string, formData: FormData) => Promise<void>;
+    fetchProductById: (id: string) => Promise<Product | null>; 
   deleteProduct: (id: string) => Promise<void>;
   whatsappContact: (
     phoneNumber: string,
@@ -59,6 +60,18 @@ export const useProductStore = create<ProductState>((set, get) => ({
       set({ loading: false });
     }
   },
+   fetchProductById: async (id: string): Promise<Product | null> => {
+  set({ loading: true });
+  try {
+    const product = await productsApi.getById(id); // could be undefined
+    set({ loading: false });
+    return product ?? null; // return null if undefined
+  } catch (error) {
+    toast.error("Failed to fetch product");
+    set({ loading: false });
+    return null;
+  }
+},
 
   createProduct: async (formData: FormData) => {
     try {
